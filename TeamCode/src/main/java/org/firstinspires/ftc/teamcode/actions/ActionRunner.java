@@ -1,25 +1,17 @@
 package org.firstinspires.ftc.teamcode.actions;
-
 public class ActionRunner {
-    private Action[] actions;
-    private int step;
-    private int steps;
-    public ActionRunner(Action[] actionSequence){
-        this.step = 0;
-        this.actions = actionSequence;
-        this.steps = actionSequence.length;
+    private final Action action;
+    private boolean completed = false;
+
+    public ActionRunner(Action action){
+        this.action = action;
     }
 
-    public boolean runActions(){
-        if (step < steps) {
-            Action currentAction = this.actions[step];
-            boolean result = currentAction.run();
-            if (!result){
-                step++;
-            }
-
-            return true;
+    // run action until completion
+    public boolean run(){
+        if (!completed) {
+            completed = !action.run();
         }
-        return false;
+        return !completed;
     }
 }

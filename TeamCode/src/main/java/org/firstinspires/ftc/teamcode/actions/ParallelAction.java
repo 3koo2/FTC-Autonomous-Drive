@@ -1,28 +1,25 @@
 package org.firstinspires.ftc.teamcode.actions;
 
 public class ParallelAction implements Action{
-    private Action[] actions;
-    private boolean[] completed;
-    private int steps;
-
-    public ParallelAction(Action[] actions){
+    private final boolean[] counters;
+    private final Action[] actions;
+    public ParallelAction(Action... actions){
         this.actions = actions;
-        this.steps = actions.length;
-        this.completed = new boolean[this.steps];
+        // The counters array will be populated by false
+        counters = new boolean[actions.length];
     }
+
     @Override
     public boolean run(){
-        for (int i = 0; i < this.actions.length; i++){
-            if (!completed[i]) {
-                boolean result = this.actions[i].run();
-                completed[i] = !result;
+        boolean result = false;
+        for (int i = 0; i < actions.length; i++){
+            if (!counters[i]){
+                counters[i] = !actions[i].run();
+            }
+            if (!result) {
+                result = counters[i];
             }
         }
-        for (boolean results : completed){
-            if (!results){
-                return true;
-            }
-        }
-        return false;
+        return result;
     }
 }
